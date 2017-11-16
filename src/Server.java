@@ -6,7 +6,6 @@ import java.util.Map;
 
 public class Server {
 	private static Map<String, ServerThread> users = new HashMap<>();
-	
 	public static final int PORT = 1234;
 
 	public static void main(String[] args) {
@@ -28,14 +27,11 @@ public class Server {
 		}
 	}
 	
-	public void addUserThread(String username, ServerThread thread) {
-		users.put(username, thread);
+	public void addUsers(String username, ServerThread serverThread) {
+		users.put(username, serverThread);
 	}
 	
-	public ServerThread getUserThread(String username) {
-		if (users.get(username) != null) {
-			return users.get(username);
-		}
-		return null;
+	public ServerThread getUser(String username) {
+		return users.get(username);
 	}
 }

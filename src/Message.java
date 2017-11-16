@@ -2,9 +2,9 @@ import java.io.Serializable;
 
 public class Message implements Serializable {
 	private static final long serialVersionUID = -2723363051271966964L;
-	String messageBody;
-	String sender;
-	String receiver;
+	private String messageBody;
+	private String sender;
+	private String receiver;
 
 	public Message(String sender, String receiver, String messageBody) {
 		this.messageBody = messageBody;
@@ -26,5 +26,13 @@ public class Message implements Serializable {
 
 	public void setReceiver(String receiver) {
 		this.receiver = receiver;
+	}
+
+	public String getSender() {
+		return sender;
+	}
+
+	public void setSender(String sender) {
+		this.sender = sender;
 	}
 }
