@@ -10,7 +10,6 @@ public class Client {
 		try {
 			if (args.length == 1) {
 				String name = args[0];
-				System.out.println(name);
 				Socket socket = new Socket("localhost", Server.PORT);
 				ObjectOutputStream objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
 				ObjectInputStream objectInputStream = new ObjectInputStream(socket.getInputStream());
