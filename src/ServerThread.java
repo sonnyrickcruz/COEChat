@@ -6,25 +6,33 @@ import java.net.Socket;
 public class ServerThread extends Thread {
 	Socket socket;
 	Server server;
+	UserStreams user;
 
 	ServerThread(Socket socket, Server server) {
 		this.socket = socket;
 		this.server = server;
+		user = new UserStreams();
 	}
 
 	public void run() {
 		Message message;
 		try {
-			ObjectInputStream objectInputStream = new ObjectInputStream(socket.getInputStream());
-			ObjectOutputStream objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
-			String username = (String) objectInputStream.readObject();
+			user.setObjectInputStream(new ObjectInputStream(socket.getInputStream()));
+			user.setObjectOutputStream(new ObjectOutputStream(socket.getOutputStream()));
+			String username = (String) user.getObjectInputStream().readObject();
+			Server.users.put(username, this);
 			System.out.println(username + " is now connected.");
-			server.addUserThread(username, this);
-			while ((message = (Message) objectInputStream.readObject()) != null) {
+			while (true) {
+				message = (Message) user.getObjectInputStream().readObject();
 				doSomething(message);
-				objectOutputStream.writeObject(message);
+				user.getObjectOutputStream().writeObject(message);
+				System.out.println(Server.users);
+				if (!message.getReceiver().equalsIgnoreCase(username) && Server.users.get(message.getReceiver()) != null) {
+					System.out.println("Sending message to: " + message.getReceiver());
+					Server.users.get(message.getReceiver()).user.getObjectOutputStream().writeObject(message);
+				}
 			}
-			socket.close();
+			//socket.close();
 		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();
 		}
